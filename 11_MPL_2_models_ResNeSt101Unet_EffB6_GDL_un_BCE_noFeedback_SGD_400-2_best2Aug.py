@@ -643,8 +643,8 @@ class MPL:
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--bl", "--batch_size_labeled", default=4)
-    parser.add_argument("--bu", "--batch_size_un", default=10)
+    parser.add_argument("--bl", "--batch_size_labeled", default=20)
+    parser.add_argument("--bu", "--batch_size_un", default=80)
     parser.add_argument("--e", "--Epoch", default=200)
     parser.add_argument("--fe", "--finetune_epoch", default=125)
     parser.add_argument("--c", "--cpu_core", default=10)
@@ -652,16 +652,16 @@ if __name__ == "__main__":
                         default=torch.device("cuda:0" if torch.cuda.is_available() else "cpu"))
     parser.add_argument("--su_loss1", default=GeneralizedDiceLoss()) # nn.BCEWithLogitsLoss()
     parser.add_argument("--un_loss", default=nn.BCEWithLogitsLoss()) # nn.MSELoss()
-    parser.add_argument("--i_dir", "--img_dir", default=Path("./1229/train/imgs"))
-    parser.add_argument("--l_dir", "--label_dir", default=Path("./1229/train/labels2"))
+    parser.add_argument("--i_dir", "--img_dir", default=Path("/mnt/workspace/CAG/imgs"))
+    parser.add_argument("--l_dir", "--label_dir", default=Path("/mnt/workspace/CAG/labels2"))
     parser.add_argument("--s_dir", "--save_dir", default=Path("./record/11_MPL_2_models_ResNeSt101Unet_EffB6_GDL_un_BCE_noFeedback_SGD_400-2_best2Aug/5F_2"))
-    parser.add_argument("--t_txt_path", "--train_txt_path", default="./1229/labeled_400_2.txt")
-    parser.add_argument("--t_un_txt_path", "--train_un_txt_path", default="./1229/unlabeled_all.txt")
-    parser.add_argument("--v_txt_path", "--valid_txt_path", default="./1229/valid_2.txt")
+    parser.add_argument("--t_txt_path", "--train_txt_path", default="/mnt/workspace/s3_train/1229/labeled_400_2.txt")
+    parser.add_argument("--t_un_txt_path", "--train_un_txt_path", default="/mnt/workspace/s3_train/1229/unlabeled_all.txt")
+    parser.add_argument("--v_txt_path", "--valid_txt_path", default="/mnt/workspace/s3_train/1229/valid_2.txt")
     parser.add_argument("--ms", "--student_model", default=smp.Unet("efficientnet-b6", in_channels=1, classes=1)) # timm-resnest101e
     parser.add_argument("--mt", "--teacher_model", default=smp.Unet("timm-resnest101e", in_channels=1, classes=1))
-    parser.add_argument("--lr_t", "--learning_rate_t", default=8e-2)
-    parser.add_argument("--lr_s", "--learning_rate_s", default=1e-1)
+    parser.add_argument("--lr_t", "--learning_rate_t", default=4e-1)
+    parser.add_argument("--lr_s", "--learning_rate_s", default=8e-1)
     parser.add_argument("--l2", "--weight_decay", default=1e-4)
     parser.add_argument("--k", "--metric", default=["loss", "SE", "SP", "PR", "F1"])
     parser.add_argument("--cons_w", "--consistency_weight", default=1)
@@ -698,7 +698,7 @@ if __name__ == "__main__":
                 train_iter_t=args.iter_t,
                 cons_weight=args.cons_w,
                 model_path=args.model_path)
-    # train.start()
+    train.start()
     # train.finetune_start()
     train.load_model_and_save_csv()
     # train.all_thresholds()
